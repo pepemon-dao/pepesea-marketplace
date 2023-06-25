@@ -1,0 +1,1 @@
+export {default,marketPlaceMeta} from './MarketPlace';
