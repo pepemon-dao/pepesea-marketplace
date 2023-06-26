@@ -35,7 +35,7 @@ const CardSingle: React.FC<any> = ({
 		'marketplace-v3'
 	);
 
-	console.log('marketplace: ', loadingMarketplace);
+	// console.log('marketplace: ', loadingMarketplace);
 
 	const { data: directListing, isLoading: loadingDirectListing } =
 		useValidDirectListings(marketplace, {
@@ -50,7 +50,7 @@ const CardSingle: React.FC<any> = ({
 			tokenId: nft?.metadata?.id,
 		});
 
-	console.log(directListing, auctionListing);
+	// console.log(directListing, auctionListing);
 
 	const self = {
 		cardId: nft?.metadata?.id && nft?.metadata?.id,
@@ -61,7 +61,7 @@ const CardSingle: React.FC<any> = ({
 			null,
 	};
 
-	console.log('selected Card', self);
+	// console.log('selected Card', self);
 
 	return (
 		<>

@@ -40,7 +40,7 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	selectedCard,
 }) => {
 
-	console.log('selected card: ',selectedCard);
+	// ('selected card: ',selectedCard);console.log
 
 	const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
 		MARKETPLACE_ADDRESS,
