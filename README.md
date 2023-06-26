@@ -2,13 +2,11 @@
 # Pepemon Frontend
 See also: [pepemon.world](https://pepemon.world)
 
-This repository contains two projects:
-* [@pepemon/app](packages/app/)
-* [@pepemon/contracts](packages/contracts/)
+This repository contains pepemon nft marketplace:
 
-## Pepemon App
 
-This project is located in `packages/app`.
+## Pepemon Marketplace
+
 
 In the project directory, you can run:
 
