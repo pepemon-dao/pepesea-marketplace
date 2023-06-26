@@ -9,7 +9,7 @@ import {
 } from '@thirdweb-dev/react';
 import { NFT, ThirdwebSDK } from '@thirdweb-dev/sdk';
 import React, { useState } from 'react';
-
+import styled from "styled-components";
 import {
 	Button,
 	ExternalLink,
@@ -30,7 +30,6 @@ import Skeleton from '../../../components/Skeleton/Skeleton';
 import Input from '../../../components/Input/Input';
 
 import {
-	StyledPepemonCardPrice,
 	StoreAside,
 	StyledStoreBody,
 	StyledPepemonCardMeta,
@@ -40,7 +39,8 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	setSelectedCard,
 	selectedCard,
 }) => {
-	// console.log(selectedCard);
+
+	console.log('selected card: ',selectedCard);
 
 	const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
 		MARKETPLACE_ADDRESS,
@@ -246,7 +246,9 @@ const MarketPlaceCardAside: React.FC<any> = ({
 				<Skeleton
 					isLoaded={loadingDirectListing === false || loadingAuction === false}>
 					{directListing?.[0] || auctionListing?.[0] ? (
-						<>
+						<>	
+						
+
 							<Button
 								width='100%'
 								styling='purple'
@@ -288,3 +290,32 @@ const MarketPlaceCardAside: React.FC<any> = ({
 };
 
 export default MarketPlaceCardAside;
+
+
+export const StyledPepemonCardPrice = styled.span<{ styling?: string }>`
+  & {
+    background-color: ${(props) =>
+      props.styling === "alt"
+        ? props.theme.color.white
+        : props.theme.color.black};
+    color: ${(props) =>
+      props.styling === "alt"
+        ? props.theme.color.black
+        : props.theme.color.white};
+    font-family: ${(props) => props.theme.font.spaceMace};
+    border-radius: 6px;
+    display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    padding: ${(props) => (props.styling === "alt" ? "" : "2px 8px")};
+    font-size: ${(props) => (props.styling === "alt" ? "1rem" : ".8rem")};
+    transform: ${(props) => (props.styling === "alt" ? "" : "translateY(40%)")};
+    position: relative;
+    z-index: 1;
+  }
+
+  & img {
+    width: 1.8em;
+  }
+`;

@@ -10,6 +10,10 @@ import {
 
 import Skeleton from '../../../components/Skeleton/Skeleton';
 
+import { cardback_normal, coin } from "../../../assets";
+
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import styled from "styled-components";
 import {
 	MARKETPLACE_ADDRESS,
 	NFT_COLLECTION_ADDRESS,
@@ -62,7 +66,13 @@ const MarketPlaceSellCardsCollection: React.FC<any> = ({
 				<StyledStoreCardsInner gridCols={selectedCard ? 3 : 5}>
 					{isLoading ? (
 						[...Array(5)].map((_, index) => (
-							<Skeleton key={index} height={'200px'} width={'200px'} />
+							<StyledPepemonCardImage
+							width="747"
+							height="1038"
+							effect="blur"
+							src={cardback_normal}
+							alt={"Loading card"}
+						  />
 						))
 					) : address && data && data.length > 0 ? (
 						data.map((nft, index) => {
@@ -70,6 +80,7 @@ const MarketPlaceSellCardsCollection: React.FC<any> = ({
 								<CardSingle
 									key={index}
 									nft={nft}
+									cardId={nft?.metadata?.id}
 									selectedCard={selectedCard}
 									setSelectedCard={setSelectedCard}
 								/>
@@ -115,3 +126,24 @@ const MarketPlaceSellCardsCollection: React.FC<any> = ({
 };
 
 export default MarketPlaceSellCardsCollection;
+
+
+export const StyledPepemonCardImage = styled(LazyLoadImage)<{
+	active?: boolean;
+  }>`
+	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+	height: auto;
+	max-width: 25em;
+	position: relative;
+	width: 100%;
+	z-index: 0;
+	transition: filter 0.2s ease-in-out;
+  
+	${({ active }) =>
+	  active &&
+	  `
+		  &{
+			  filter: drop-shadow(0 0 50px #894fbe);
+		  }
+	  `}
+  `;

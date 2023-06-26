@@ -1,8 +1,10 @@
 import React, { useEffect, useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { cardback_normal, coin } from '../../../assets';
-import { Title, Spacer, StyledSpacer,Text } from '../../../components';
+import { Title, Spacer, StyledSpacer, Text } from '../../../components';
 import { theme } from '../../../theme';
+
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import {
 	ThirdwebNftMedia,
 	useContract,
@@ -28,36 +30,113 @@ const CardSingle: React.FC<any> = ({
 	selectedCard,
 	setSelectedCard,
 }) => {
-	const self = {
-		cardId: nft.metadata.id && nft.metadata.id,
-		nft: nft,
-	};
-
-	//console.log('selected Card', self);
-
 	const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
 		MARKETPLACE_ADDRESS,
 		'marketplace-v3'
 	);
 
+	console.log('marketplace: ', loadingMarketplace);
+
 	const { data: directListing, isLoading: loadingDirectListing } =
 		useValidDirectListings(marketplace, {
 			tokenContract: NFT_COLLECTION_ADDRESS,
-			tokenId: nft.metadata.id,
+			tokenId: nft?.metadata?.id,
 		});
 
 	//Add for auciton section
 	const { data: auctionListing, isLoading: loadingAuction } =
 		useValidEnglishAuctions(marketplace, {
 			tokenContract: NFT_COLLECTION_ADDRESS,
-			tokenId: nft.metadata.id,
+			tokenId: nft?.metadata?.id,
 		});
 
-	//console.log(directListing, 'auctionListing');
+	console.log(directListing, auctionListing);
+
+	const self = {
+		cardId: nft?.metadata?.id && nft?.metadata?.id,
+		nft: nft,
+		cardPrice:
+			(directListing && directListing[0]?.currencyValuePerToken) ||
+			(auctionListing && auctionListing[0]?.minimumBidCurrencyValue) ||
+			null,
+	};
+
+	console.log('selected Card', self);
 
 	return (
-		<div onClick={() => setSelectedCard(self)}>
-			<Flex
+		<>
+			<StyledPepemonCard
+				style={{
+					opacity: !loadingMarketplace ? '100%' : '60%',
+				}}
+				isLoaded={!loadingMarketplace}>
+				<StyledPepemonCardPrice styling={!loadingMarketplace ? 'alt' : ''}>
+					<img loading='lazy' src={coin} alt='coin' />
+					{!loadingDirectListing && !loadingAuction
+						? directListing && directListing.length > 0
+							? `${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`
+							: auctionListing && auctionListing.length > 0
+							? `${auctionListing[0]?.buyoutCurrencyValue.displayValue} ${auctionListing[0]?.buyoutCurrencyValue.symbol}`
+							: 'Not for sale'
+						: 'Loading...'}
+				</StyledPepemonCardPrice>
+
+				<div>
+					<StyledPepemonCardImage
+						width='747'
+						height='1038'
+						effect='blur'
+						active={
+							cardId === nft?.metadata?.id &&
+							selectedCard?.cardId === nft?.metadata?.id
+						}
+						src={nft? nft?.metadata?.image: cardback_normal}
+						alt={nft?.metadata?.name}
+						onClick={() =>
+							!loadingMarketplace &&
+							!loadingDirectListing &&
+							!loadingAuction &&
+							setSelectedCard(self)
+						}
+					/>
+					<Spacer size='sm' />
+					<Title as='h4' font={theme.font.neometric}>
+						{nft?.metadata?.name}
+					</Title>
+					<StyledSpacer bg={theme.color.gray[100]} size={2} />
+					<Spacer size='sm' />
+
+					<Box>
+						{loadingMarketplace || loadingDirectListing || loadingAuction ? (
+							<Skeleton></Skeleton>
+						) : directListing && directListing[0] ? (
+							<Box>
+								<StyledPepemonCardMeta>
+									<dt>Price</dt>
+									<dd>{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</dd>
+								</StyledPepemonCardMeta>
+							</Box>
+						) : auctionListing && auctionListing[0] ? (
+							<Box>
+								<StyledPepemonCardMeta>
+									<dt>Minimum Bid</dt>
+									<dd>{`${auctionListing[0]?.minimumBidCurrencyValue.displayValue} ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}</dd>
+								</StyledPepemonCardMeta>
+							</Box>
+						) : (
+							<Box>
+								<StyledPepemonCardMeta>
+									<dt>Price</dt>
+
+									<dd>Not Listed</dd>
+								</StyledPepemonCardMeta>
+							</Box>
+						)}
+					</Box>
+				</div>
+			</StyledPepemonCard>
+
+			{/* <Flex
 				direction={'column'}
 				backgroundColor={'#EEE'}
 				justifyContent={'center'}
@@ -81,7 +160,7 @@ const CardSingle: React.FC<any> = ({
 					color={theme.color.gray[600]}>
 					{nft.metadata.name}
 				</Text>
-        <Spacer size={'md'} /> 
+				<Spacer size={'md'} />
 				<Box>
 					{loadingMarketplace || loadingDirectListing || loadingAuction ? (
 						<Skeleton></Skeleton>
@@ -109,8 +188,8 @@ const CardSingle: React.FC<any> = ({
 						</Box>
 					)}
 				</Box>
-			</Flex>
-		</div>
+			</Flex> */}
+		</>
 	);
 };
 
@@ -125,7 +204,7 @@ interface FlexProps {
 	borderColor?: string;
 	borderWidth?: number;
 	cursor?: string;
-  boxShadow?: string;
+	boxShadow?: string;
 }
 
 const Flex = styled.div<FlexProps>`
@@ -160,3 +239,33 @@ interface TextProps {
 // 	color: ${(props) => props.color || 'inherit'};
 // 	font-weight: ${(props) => props.fontWeight || 'normal'};
 // `;
+
+const StyledPepemonCard = styled.div<{ isLoaded: boolean }>`
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: column;
+
+	& {
+		cursor: ${({ isLoaded }) => (isLoaded ? 'pointer' : 'not-allowed')};
+	}
+`;
+
+export const StyledPepemonCardImage = styled(LazyLoadImage)<{
+	active?: boolean;
+}>`
+	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+	height: auto;
+	max-width: 25em;
+	position: relative;
+	width: 100%;
+	z-index: 0;
+	transition: filter 0.2s ease-in-out;
+
+	${({ active }) =>
+		active &&
+		css`
+			filter: drop-shadow(0 0 50px #894fbe);
+		`}
+`;
+
+

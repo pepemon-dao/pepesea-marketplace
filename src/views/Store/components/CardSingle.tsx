@@ -13,14 +13,14 @@ export const StyledPepemonCard = styled.div<{ isLoaded: boolean }>`
   }
 `;
 
-export const StyledPepemonCardPrice = styled.span<{ styling?: string }>`
+export const StyledPepemonCardPrice = styled.span<{ styling?: string; isLoaded?: boolean }>`
   & {
     background-color: ${(props) =>
-      props.styling === "alt"
+      props.isLoaded && props.styling === "alt"
         ? props.theme.color.white
         : props.theme.color.black};
     color: ${(props) =>
-      props.styling === "alt"
+      props.isLoaded && props.styling === "alt"
         ? props.theme.color.black
         : props.theme.color.white};
     font-family: ${(props) => props.theme.font.spaceMace};
@@ -29,9 +29,9 @@ export const StyledPepemonCardPrice = styled.span<{ styling?: string }>`
     margin-left: auto;
     margin-right: auto;
     align-items: center;
-    padding: ${(props) => (props.styling === "alt" ? "" : "2px 8px")};
-    font-size: ${(props) => (props.styling === "alt" ? "1rem" : ".8rem")};
-    transform: ${(props) => (props.styling === "alt" ? "" : "translateY(40%)")};
+    padding: ${(props) => (props.isLoaded && props.styling === "alt" ? "" : "2px 8px")};
+    font-size: ${(props) => (props.isLoaded && props.styling === "alt" ? "1rem" : ".8rem")};
+    transform: ${(props) => (props.isLoaded && props.styling === "alt" ? "" : "translateY(40%)")};
     position: relative;
     z-index: 1;
   }
@@ -40,6 +40,7 @@ export const StyledPepemonCardPrice = styled.span<{ styling?: string }>`
     width: 1.8em;
   }
 `;
+
 
 
 
