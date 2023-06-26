@@ -1,5 +1,5 @@
 ![Build status](https://github.com/pepem00n/pepemon-frontend/actions/workflows/main.yml/badge.svg)
-# Pepemon Frontend
+# Pepemon Marketplace
 See also: [pepemon.world](https://pepemon.world)
 
 This repository contains pepemon nft marketplace:
