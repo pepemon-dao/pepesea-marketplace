@@ -8,7 +8,7 @@ import {
 	useValidEnglishAuctions,
 } from '@thirdweb-dev/react';
 import { NFT, ThirdwebSDK } from '@thirdweb-dev/sdk';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from "styled-components";
 import {
 	Button,
@@ -40,7 +40,14 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	selectedCard,
 }) => {
 
-	// ('selected card: ',selectedCard);console.log
+	// if selected card is changed then reset the error message
+
+	useEffect(() => {	
+		setErrorMsg('');
+	}
+	, [selectedCard]);
+
+	// console.log('selected card: ',selectedCard);
 
 	const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
 		MARKETPLACE_ADDRESS,
@@ -55,7 +62,6 @@ const MarketPlaceCardAside: React.FC<any> = ({
 			tokenId: selectedCard.nft.metadata.id,
 		});
 
-	// console.log(directListing, 'directListing from MarketPlaceCardAside.tsx');
 
 	const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -138,14 +144,7 @@ const MarketPlaceCardAside: React.FC<any> = ({
 		}
 	};
 
-	// console.log(
-	// 	loadingDirectListing,
-	// 	'directlisting from MarketPlaceCardAside.tsx'
-	// );
-	// console.log(loadingAuction, 'auctionListing from MarketPlaceCardAside.tsx');
 
-	// console.log(auctionListing, 'auctionListing from MarketPlaceCardAside.tsx');
-	// console.log(directListing, 'directlisting from MarketPlaceCardAside.tsx');
 
 	const handleChange = (e: any) => {
 		setErrorMsg('');
