@@ -7,7 +7,7 @@ import {
 	useCreateDirectListing,
 } from '@thirdweb-dev/react';
 import { NFT, ThirdwebSDK } from '@thirdweb-dev/sdk';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -68,6 +68,13 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 	selectedCard,
 }) => {
 
+	const [errorMsg, setErrorMsg] = useState<string>('');
+
+	useEffect(() => {	
+		setErrorMsg('');
+	}
+	, [selectedCard]);
+
 	const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
 		MARKETPLACE_ADDRESS,
 		'marketplace-v3'
@@ -79,6 +86,7 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 		useCreateDirectListing(marketplace);
 
 	const checkAndProvideApproval = async () => {
+		setErrorMsg('')
 		try {
 			const hasApproval = await nftCollection?.call('isApprovedForAll', [
 				selectedCard.nft.owner,
@@ -95,9 +103,10 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 					console.log('Approval provided', txResult);
 				}
 			}
-
+			setErrorMsg('')
 			return true;
 		} catch (err) {
+			setErrorMsg('Something went wrong. Please check your credential')
 			console.log(err);
 		}
 	};
@@ -111,6 +120,7 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 
 	const handleTabClick = (tabIndex: any) => {
 		setActiveTab(tabIndex);
+		setErrorMsg('')
 	};
 
 	const { register: registerDirect, handleSubmit: handleSubmitDirect } =
@@ -126,6 +136,8 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 
 
 	const handleSubmissionDirect = async (data: DirectFormData) => {
+
+		setErrorMsg('')
 		
 		setDirectButton('Creating Direct Listing...');
 
@@ -141,9 +153,10 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 			console.log('Direct Listing transaction', txResult);
 			setSelectedCard('');
 			setDirectButton('Create Direct Listing');
-
+			setErrorMsg('')
 			return txResult;
 		} catch (err:any) {
+			setErrorMsg('Something went wrong. Please check your credential')
 			setDirectButton('Create Direct Listing');
 			const errorMessage = err[0]?.message;
 			console.log('Direct Listing error: ', errorMessage);
@@ -167,7 +180,7 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 
 	const handleSubmissionAuction = async (data: AuctionFormData) => {
 		setAuctionButton('Creating Auction...');
-
+		setErrorMsg('')
 		try {
 			await checkAndProvideApproval();
 			const txResult = await createAuctionListing({
@@ -181,9 +194,10 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 			setAuctionButton('Create Auction');
 			setSelectedCard('');
 			console.log('auction', txResult);
-
+			setErrorMsg('')
 			return txResult;
 		} catch (err) {
+			setErrorMsg('Something went wrong. Please check your credential')
 			setAuctionButton('Create Auction');
 			console.log('auction', err);
 		}
@@ -387,6 +401,9 @@ const MarketPlaceSellCardAside: React.FC<any> = ({
 						</TabPanels>
 					</Tabs>
 				</Skeleton>
+				<Spacer size='sm' />
+
+					{errorMsg && <Text color={'red'}>{errorMsg}</Text>}
 			</StyledStoreBody>
 		</StoreAside>
 	);
