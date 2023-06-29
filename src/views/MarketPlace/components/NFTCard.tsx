@@ -7,10 +7,10 @@ import {
 	Text,
 	Spacer,
 	Button,
+	TopBar,
 } from '../../../components';
 import { theme } from '../../../theme';
 import { Link, Redirect, useParams } from 'react-router-dom';
-
 
 import {
 	StyledStoreWrapper,
@@ -18,24 +18,46 @@ import {
 	StyledStoreBody,
 } from '../../Store/components';
 
-import { ConnectWallet } from '@thirdweb-dev/react';
+import {
+	ConnectWallet,
+	useNetworkMismatch,
+	useChain,
+	useSwitchChain,
+} from '@thirdweb-dev/react';
 
 import MarketPlaceCardAside from './MarketPlaceCardAside';
 import MarketPlaceCardsCollection from './MarketPlaceCardsCollection';
 import MarketPlaceSellCardsCollection from './MarketPlaceSellCardsCollection';
 import MarketPlaceSellCardAside from './MarketPlaceSellCardAside';
 
-
 const NFTCard: React.FC<any> = () => {
 	const routerParams: any = useParams();
 	const [selectedCard, setSelectedCard] = useState(null);
+	const isMismatched = useNetworkMismatch();
+	const chain = useChain();
+	const switchChain = useSwitchChain();
+	// console.log('chain: ', chain);
 
 	const itemSelected =
 		selectedCard &&
 		(routerParams.marketPlaceState === 'buyNfts' ||
 			routerParams.marketPlaceState === 'sellNfts');
 
-	// console.log(itemSelected);
+	// console.log('isMismatched: ', isMismatched);
+
+	const handleSwitchChain = async() => {
+
+		try{
+
+			await switchChain(906090);
+
+		}catch(e){
+
+			console.log(e)
+
+		}
+
+	}
 
 	const storeWidth = () => {
 		if (itemSelected) return 'calc(60% + .5em)';
@@ -51,8 +73,7 @@ const NFTCard: React.FC<any> = () => {
 		}
 	}, [routerParams.marketPlaceState]);
 
-	if (!routerParams.marketPlaceState)
-		return <Redirect to='/buyNfts' />;
+	if (!routerParams.marketPlaceState) return <Redirect to='/buyNfts' />;
 
 	return (
 		<div style={{ display: 'flex', position: 'relative' }}>
@@ -66,10 +87,12 @@ const NFTCard: React.FC<any> = () => {
 						<StyledLinkTitle
 							isInactive={routerParams.marketPlaceState !== 'sellNfts'}>
 							<Link to={`/sellNfts`}>2. Sell NFTs</Link>
-							
 						</StyledLinkTitle>
 					</div>
-					<ConnectWallet/>
+					<ConnectWallet />
+					{isMismatched && (
+						<button onClick={async () => handleSwitchChain()}>Switch to PEPE</button>
+					)}
 				</StyledStoreHeader>
 
 				<StyledStoreBody>

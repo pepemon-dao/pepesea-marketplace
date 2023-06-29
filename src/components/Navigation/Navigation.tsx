@@ -46,7 +46,7 @@ const Navigation = () => {
 					<StyledMenuListItem
 						onClick={() => setIsOpen(false)}
 						isActive={pathname === '/' && true}>
-						<ExternalStyledLink external href='https://pepemon.world'>
+						<ExternalStyledLink href='https://pepemon.world'>
 							<StyledLinkIcon loading='lazy' src={home} alt='home' />
 							<span>Home</span>
 						</ExternalStyledLink>
@@ -54,7 +54,7 @@ const Navigation = () => {
 					<StyledMenuListItem
 						onClick={() => setIsOpen(false)}
 						isActive={pathname.startsWith('/staking') && true}>
-						<ExternalStyledLink external href='https://pepemon.world/staking'>
+						<ExternalStyledLink href='https://pepemon.world/staking'>
 							<StyledLinkIcon loading='lazy' src={staking} alt='staking' />
 							<span>Earning</span>
 						</ExternalStyledLink>
@@ -62,9 +62,7 @@ const Navigation = () => {
 					<StyledMenuListItem
 						onClick={() => setIsOpen(false)}
 						isActive={pathname.startsWith('/subscription') && true}>
-						<ExternalStyledLink
-							external
-							href='https://pepemon.world/subscription'>
+						<ExternalStyledLink href='https://pepemon.world/subscription'>
 							<StyledLinkIcon
 								loading='lazy'
 								src={subscriptions}
@@ -76,7 +74,7 @@ const Navigation = () => {
 					<StyledMenuListItem
 						onClick={() => setIsOpen(false)}
 						isActive={pathname.startsWith('/store') && true}>
-						<ExternalStyledLink external href='https://pepemon.world/store'>
+						<ExternalStyledLink href='https://pepemon.world/store'>
 							<StyledLinkIcon loading='lazy' src={store} alt='store' />
 							<span>Store</span>
 						</ExternalStyledLink>
@@ -84,7 +82,7 @@ const Navigation = () => {
 					<StyledMenuListItem
 						onClick={() => setIsOpen(false)}
 						isActive={pathname.startsWith('/bridge') && true}>
-						<ExternalStyledLink external href='https://pepemon.world/bridge'>
+						<ExternalStyledLink href='https://pepemon.world/bridge'>
 							<StyledLinkIcon loading='lazy' src={bridge} alt='bridge' />
 							<span>Portal</span>
 						</ExternalStyledLink>
@@ -203,11 +201,44 @@ const StyledLink = styled(Link)<StyledLinkProps>`
 	}
 `;
 
+interface ExternalStyledLinkProps {
+	isActive?: boolean;
+}
+
+const ExternalStyledLink = styled.a<ExternalStyledLinkProps>`
+	align-items: flex-start;
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 1.6em;
+	margin-top: 1.6em;
+	overflow: hidden;
+	text-decoration: none;
+
+	@media (min-width: ${theme.breakpoints.desktop}) {
+		align-items: center;
+	}
+
+	span {
+		flex: 1 0 auto;
+		font-size: 1.25rem;
+		margin-left: 1em;
+		padding-right: 1em;
+		position: relative;
+
+		@media (min-width: ${theme.breakpoints.desktop}) {
+			opacity: 0;
+			padding-right: 1.9em;
+			transform: translateX(-100%);
+			transition: all 0.4s cubic-bezier(0.04, 0.8, 0.61, 0.89);
+		}
+	}
+`;
+
 const StyledMenuListItem = styled.li<StyledLinkProps>`
 	overflow: hidden;
 	width: 100%;
 
-	${StyledLink} {
+	${StyledLink},${ExternalStyledLink} {
 		color: ${(props) =>
 			props.isActive ? theme.color.layoutPrimary : theme.color.layoutOverlay};
 		pointer-events: ${(props) => props.soon && 'none'};
@@ -236,23 +267,6 @@ const StyledMenuListItem = styled.li<StyledLinkProps>`
 			`}
 		}
 	}
-
-	${({ isActive }) =>
-		isActive &&
-		`
-    ${StyledLink} {
-      color: ${theme.color.layoutPrimary};
-
-      img {
-        opacity: 1;
-      }
-
-      span {
-        opacity: 1;
-        transform: translateX(0%);
-      }
-    }
-  `}
 `;
 
 const StyledMenuIcon = styled.button`
@@ -328,44 +342,6 @@ const StyledMenuOuterWrapper = styled.div`
 				opacity: 1;
 				transform: translateX(0%);
 			}
-		}
-	}
-`;
-
-interface ExternalStyledLinkProps {
-	external?: boolean;
-}
-
-const ExternalStyledLink = styled.a.attrs<ExternalStyledLinkProps>(
-	(props) =>
-		props.external && {
-			rel: 'noopener noreferrer',
-		}
-)<ExternalStyledLinkProps>`
-	align-items: flex-start;
-	display: flex;
-	justify-content: flex-start;
-	margin-bottom: 1.6em;
-	margin-top: 1.6em;
-	overflow: hidde;
-	text-decoration: none;
-
-	@media (min-width: ${theme.breakpoints.desktop}) {
-		align-items: center;
-	}
-
-	span {
-		flex: 1 0 auto;
-		font-size: 1.25rem;
-		margin-left: 1em;
-		padding-right: 1em;
-		position: relative;
-
-		@media (min-width: ${theme.breakpoints.desktop}) {
-			opacity: 0;
-			padding-right: 1.9em;
-			transform: translateX(-100%);
-			transition: all 0.4s cubic-bezier(0.04, 0.8, 0.61, 0.89);
 		}
 	}
 `;

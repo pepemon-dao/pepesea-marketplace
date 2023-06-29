@@ -8,20 +8,14 @@ import { ModalActions,
 } from '../../components';
 
 interface ModalProps {
-  maxWidth?: number;
-  children?: React.ReactNode;
-}
-
-interface Props {
-  children: React.ReactNode;
+	maxWidth?: number;
 }
 
 export interface ModalData extends ModalProps {
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  modalActions?: any;
+	title?: React.ReactNode|string,
+	content?: React.ReactNode,
+	modalActions?: any
 }
-
 
 interface ModalsContext {
 	data?: ModalData,
@@ -36,7 +30,7 @@ export const Context = createContext<ModalsContext>({
 	onDismiss: () => {},
 })
 
-const ModalsProvider: React.FC<Props>  = ({ children }) => {
+const ModalsProvider: React.FC<{ children: React.ReactNode }>  = ({ children }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [data, setData] = useState<ModalData>();
 	const [, setModalKey] = useState<string>();
@@ -54,32 +48,36 @@ const ModalsProvider: React.FC<Props>  = ({ children }) => {
 
 	const modalRef = useRef(null);
 	useOutsideClick(modalRef, () => isOpen && handleDismiss());
-
 	return (
-		<Context.Provider value={{
+		<Context.Provider
+		  value={{
 			data,
 			isOpen,
 			onPresent: handlePresent,
 			onDismiss: handleDismiss,
-		}}>
-			{children}
-			{(data && isOpen) && (
-				<ResponsiveWrapper>
-					<Modal ref={modalRef} maxWidth={data.maxWidth}>
-						<ActionClose onClick={handleDismiss} />
-						{ data.title && <ModalTitle>{data.title}</ModalTitle> }
-						<ModalContent>
-							{React.isValidElement(data.content) && React.cloneElement(data.content as React.ReactElement<any>, {
-								onDismiss: handleDismiss,
-							})}
-						</ModalContent>
-						{ data.modalActions && <ModalActions modalActions={data.modalActions}/> }
-					</Modal>
-				</ResponsiveWrapper>
-			)}
-		</Context.Provider>
-	)
-}
+		  }}
+		>
+		  {children}
+		  {data && isOpen && (
+			<ResponsiveWrapper>
+			  <Modal ref={modalRef} maxWidth={data.maxWidth}>
+					<ActionClose onClick={handleDismiss} />
+            {data.title && <ModalTitle>{data.title}</ModalTitle>}
+            <ModalContent>
+              {React.isValidElement(data.content) &&
+                React.cloneElement(data.content as React.ReactElement<any>, {
+                  onDismiss: handleDismiss,
+                })}
+            </ModalContent>
+            {data.modalActions && (
+              <ModalActions modalActions={data.modalActions} />
+            )}
+          </Modal>
+        </ResponsiveWrapper>
+      )}
+    </Context.Provider>
+  );
+};
 
 const mobileKeyframes = keyframes`
 	0% {
@@ -145,7 +143,7 @@ const ModalTitle = styled.div`
   justify-content: center;
 `
 
-const ModalContent  = styled.div`
+const ModalContent = styled.div`
 	padding: ${(props) => props.theme.spacing[2]}px;
 `
 

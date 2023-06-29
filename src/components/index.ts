@@ -29,3 +29,5 @@ export { default as Button, ButtonLink } from './Button';
 export type { ButtonProps } from './Button';
 export { default as Badge } from './Badge';
 export { default as UnhandledError } from './UnhandledError';
+
+export { default as TopBar } from './TopBar';

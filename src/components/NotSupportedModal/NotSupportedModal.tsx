@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { UnhandledError, Modal, ModalTitle, ModalContent, ModalActions, Spacer, Text } from '../../components';
 import { theme } from '../../theme';
-
+import {
+	ConnectWallet,
+	useNetworkMismatch,
+	useChain,
+	useSwitchChain,
+} from '@thirdweb-dev/react';
   
 
 const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
@@ -9,18 +14,14 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
 	  errCode: null | any;
 	  errMsg: string;
 	}>({ errCode: null, errMsg: '' });
+
+	const isMismatched = useNetworkMismatch();
+	const chain = useChain();
+	const switchChain = useSwitchChain();
   
 	const handleSwitch = async () => {
 	  try {
-		const ethereum = (window as any).ethereum;
-		if (ethereum && ethereum.request) {
-		  await ethereum.request({
-			method: 'wallet_switchEthereumChain',
-			params: [{ chainId: '0x1' }],
-		  });
-		} else {
-		  throw new Error('Invalid wallet provider');
-		}
+		await switchChain(906090);
 	  } catch (error: any) {
 		setUnhandledError({
 		  errCode: error.code,
@@ -39,7 +40,7 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
 		  />
 		) : (
 		  <Modal>
-			<ModalTitle text="Not (yet) supported" />
+			<ModalTitle text="Switch to pepechain-testnet" />
 			<ModalContent>
 			  <Text
 				align="center"
@@ -49,14 +50,14 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
 			  >
 				{`Your chosen network is currently not supported on the ${page} page.`}
 				<br />
-				Please change your wallet provider's network to ETH.
+				Please change your wallet provider's network to pepechain-testnet.
 			  </Text>
 			</ModalContent>
 			<Spacer size="md" />
 			<ModalActions
 			  modalActions={[
 				{
-				  text: 'Switch to ETH',
+				  text: 'Switch to pepeCHAIN',
 				  buttonProps: { styling: 'purple', onClick: handleSwitch },
 				},
 			  ]}

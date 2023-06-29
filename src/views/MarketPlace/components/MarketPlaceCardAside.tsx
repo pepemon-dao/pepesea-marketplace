@@ -57,6 +57,8 @@ const MarketPlaceCardAside: React.FC<any> = ({
 
 	// console.log(directListing, 'directListing from MarketPlaceCardAside.tsx');
 
+	const [errorMsg, setErrorMsg] = useState<string>('');
+
 
 	const [buyButton, setBuyButton] = useState<string>('Buy At Asking Rate');
 	const [auctionButton, setAuctionButton] = useState<string>('Place Bid');
@@ -70,6 +72,7 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	const buyListing = async () => {
 		let transactionResult: any;
 		setBuyButton('Buying ...');
+		setErrorMsg('');
 		try {
 			if (auctionListing?.[0]) {
 				transactionResult = await marketplace?.englishAuctions.buyoutAuction(
@@ -81,10 +84,12 @@ const MarketPlaceCardAside: React.FC<any> = ({
 					1
 				);
 			}
+			setErrorMsg('');
 			setBuyButton('Buy At Asking Rate');
 			console.log(transactionResult, 'transactionResult');
 			return transactionResult;
 		} catch (e) {
+			setErrorMsg('Something went wrong. Please use valid credential');
 			console.log('transaction error', e);
 			setBuyButton('Buy At Asking Rate');
 		}
@@ -101,7 +106,9 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	const createBidOffer = async () => {
 		let txResult: any;
 
-		console.log(auctionValue);
+		// console.log(auctionValue);
+
+		setErrorMsg('');
 
 		if (!auctionValue) {
 			return;
@@ -120,10 +127,12 @@ const MarketPlaceCardAside: React.FC<any> = ({
 					totalPrice: auctionValue,
 				});
 			}
+			setErrorMsg('');
 			setAuctionButton('Place Bid');
 			console.log(txResult, 'txResult');
 			return txResult;
 		} catch (e) {
+			setErrorMsg('Something went wrong. Please use valid credential');
 			setAuctionButton('Place Bid');
 			console.log('transaction error', e);
 		}
@@ -139,6 +148,7 @@ const MarketPlaceCardAside: React.FC<any> = ({
 	// console.log(directListing, 'directlisting from MarketPlaceCardAside.tsx');
 
 	const handleChange = (e: any) => {
+		setErrorMsg('');
 		setAuctionValue(e.target.value);
 	};
 
@@ -283,6 +293,10 @@ const MarketPlaceCardAside: React.FC<any> = ({
 							Not For Sale
 						</Button>
 					)}
+
+					<Spacer size='sm' />
+
+					{errorMsg && <Text color={'red'}>{errorMsg}</Text>}
 				</Skeleton>
 			</StyledStoreBody>
 		</StoreAside>

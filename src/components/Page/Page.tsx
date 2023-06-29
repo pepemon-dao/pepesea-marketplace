@@ -7,11 +7,22 @@ import { darktealTiles } from '../../assets';
 import { theme } from '../../theme';
 import { isSupportedChain } from '../../utils';
 
+import {
+	ConnectWallet,
+	useNetworkMismatch,
+	useChain,
+	useSwitchChain,
+} from '@thirdweb-dev/react';
+
 const Page: React.FC<any> = ({children}) => {
 	const [pepemon] = useContext(PepemonProviderContext);
 	const { chainId } = pepemon;
 
 	const { pathname } = useLocation();
+
+	const isMismatched = useNetworkMismatch();
+	const chain = useChain();
+	const switchChain = useSwitchChain();
 
 	// go to top
 	window.scrollTo(0,0);
@@ -20,7 +31,7 @@ const Page: React.FC<any> = ({children}) => {
 		<StyledPageWrapper>
 			<StyledPageInner>
 				<Navigation/>
-				{ (!isSupportedChain(chainId, pathname) && chainId) ? <NotSupportedModal page='Home'/>
+				{ isMismatched ? <NotSupportedModal page='Marketplace'/>
 				: children
 				}
 			</StyledPageInner>

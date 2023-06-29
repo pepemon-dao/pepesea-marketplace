@@ -1,10 +1,10 @@
 import React, { Suspense, lazy } from 'react';
-import { useEnglishAuctions, useContract } from '@thirdweb-dev/react';
+import { useEnglishAuctions, useContract ,ConnectWallet} from '@thirdweb-dev/react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, ThemeContext } from 'styled-components';
 import { ModalsProvider, PepemonProvider } from './contexts';
 import { theme } from './theme';
-import { Page, ScrollToTop } from './components';
+import { Page, ScrollToTop,TopBar } from './components';
 
 import { withConnectedWallet } from './hocs';
 import { metas, LoadingPage } from './views';
@@ -37,11 +37,12 @@ export default function Home() {
 
 	return (
 		<Providers>
+			<TopBar />
 			<Page>
 				<Suspense fallback={<LoadingPage />}>
 					<Switch>
 						<Route path='/:marketPlaceState(buyNfts|sellNfts)?'>
-							<MarketPlace />
+							<MarketPlaceWithAuth/>
 						</Route>
 						<Route path='/terms-of-service' component={TermsOfService} />
 						
