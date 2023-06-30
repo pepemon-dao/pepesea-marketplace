@@ -13,9 +13,9 @@ import {
 	useAddress,
 	useConnect,
 	metamaskWallet,
-	coinbaseWallet ,
-	useWalletConnect 
 } from '@thirdweb-dev/react';
+
+import { WalletConnect } from '../ConnectWallet';
 
 const TopBar: React.FC<any> = () => {
 	const account = useAddress();
@@ -24,11 +24,11 @@ const TopBar: React.FC<any> = () => {
 
 
 	const handleConnect = async () => {
-		try {
-			await connect(metamaskConfig);
-		} catch (e) {
-			console.log(e);
-		}
+		// try {
+			
+		// } catch (e) {
+		// 	console.log(e);
+		// }
 	}
 
 
@@ -52,7 +52,7 @@ const TopBar: React.FC<any> = () => {
 					/>}
  
                      {
-						!account && <Button styling='green' title='Connect wallet' onClick={async()=>handleConnect()}>Connect Wallet</Button>
+						!account && <WalletConnect/>
 					}
 			</StyledTopBarInner>
 		</StyledTopBar>

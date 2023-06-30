@@ -19,7 +19,6 @@ import {
 } from '../../Store/components';
 
 import {
-	ConnectWallet,
 	useNetworkMismatch,
 	useChain,
 	useSwitchChain,
@@ -89,10 +88,8 @@ const NFTCard: React.FC<any> = () => {
 							<Link to={`/sellNfts`}>2. Sell NFTs</Link>
 						</StyledLinkTitle>
 					</div>
-					<ConnectWallet />
-					{isMismatched && (
-						<button onClick={async () => handleSwitchChain()}>Switch to PEPE</button>
-					)}
+					
+					
 				</StyledStoreHeader>
 
 				<StyledStoreBody>
