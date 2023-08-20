@@ -75,7 +75,7 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 		<div>
 			<StyledStoreCardsWrapper>
 				<Title as='h3' size='m' font={theme.font.spaceMace}>
-				Browse which NFTs are available from the collection.
+				Buy and Sell Pepemon NFTs with no stupid fees just like exchanging cards face2face but powered by blockchain
 				</Title>
 				<Spacer size='md' />
 				<StyledStoreCardsInner gridCols={selectedCard ? 3 : 5}>

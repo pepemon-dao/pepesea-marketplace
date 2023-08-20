@@ -48,7 +48,7 @@ const NFTCard: React.FC<any> = () => {
 
 		try{
 
-			await switchChain(906090);
+			await switchChain(1);
 
 		}catch(e){
 
