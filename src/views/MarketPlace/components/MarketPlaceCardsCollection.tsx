@@ -3,6 +3,7 @@ import {
 	Title,
 	Spacer,
 	DropdownMenu,
+	Text,
 	
 	// Button
 } from '../../../components';
@@ -22,6 +23,7 @@ import {
 	useContract,
 	useDirectListings,
 	useNFTs,
+	useNFT
 } from '@thirdweb-dev/react';
 
 import { theme } from '../../../theme';
@@ -45,6 +47,9 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 		MARKETPLACE_ADDRESS,
 		'marketplace-v3'
 	);
+
+	
+
 	const {
 		data: directListings,
 		isLoading,
@@ -57,13 +62,17 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 		NFT_COLLECTION_ADDRESS
 	);
 
+	const { data: nft } = useNFT(nftsss, 0);
+
+	console.log(nft)
+
 	const { data, isLoading: nftLoading } = useNFTs(nftsss);
 
-	// console.log('nftLoad', data);
+	console.log('nft', data);
 
-	// console.log('directlising', directListings);
+	console.log('directlising', directListings);
 
-	// console.log('englishAuction', englishAuctions);
+	console.log('englishAuction', englishAuctions);
 
 	const routerParams: any = useParams();
 
@@ -102,7 +111,19 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 							);
 						})
 					) : (
-						<div>loading...</div>
+						<div style={{ gridColumn: `1 / span ${selectedCard ? 3 : 5}`, display: 'flex', flexDirection: 'column', alignItems: 'center'  }}>
+							<Text
+								as='p'
+								size='l'
+								lineHeight={1.3}
+								align='center'
+								color={theme.color.gray[600]}
+								font-family={theme.font.spaceMace}>
+								Looks like there's no NFTs in this collection  - Please visit after some time :(
+							</Text>
+							<Spacer size='md' />
+							<Spacer size='md' />
+						</div>
 					)}				
 					</StyledStoreCardsInner>
 			</StyledStoreCardsWrapper>
