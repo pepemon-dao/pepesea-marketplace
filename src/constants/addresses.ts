@@ -3,7 +3,7 @@
 //mumbai
 
 
-export const MARKETPLACE_ADDRESS =  "0x82e8300D663eCE04548146ea4195F8e94a39D3f3 " as const 
+export const MARKETPLACE_ADDRESS =  "0x82e8300D663eCE04548146ea4195F8e94a39D3f3" as const 
 
 // ethereum
 

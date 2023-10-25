@@ -64,7 +64,7 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 
 	const { data, isLoading: nftLoading } = useNFTs(nftsss);
 
-	const { data: nftData } = useNFT(nftsss, '3');
+	const { data: nftData } = useNFT(nftsss, '1');
 
 		console.log('nftData', [nftData])
 
