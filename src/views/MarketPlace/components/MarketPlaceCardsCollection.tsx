@@ -22,6 +22,8 @@ import {
 	useContract,
 	useDirectListings,
 	useNFTs,
+	useNFT,
+	useContractMetadata
 } from '@thirdweb-dev/react';
 
 import { theme } from '../../../theme';
@@ -57,7 +59,14 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 		NFT_COLLECTION_ADDRESS
 	);
 
+	// console.log(nftsss)
+
+
 	const { data, isLoading: nftLoading } = useNFTs(nftsss);
+
+	const { data: nftData } = useNFT(nftsss, '1');
+
+		console.log('nftData', [nftData])
 
 	// console.log('nftLoad', data);
 
@@ -89,8 +98,8 @@ const MarketPlaceCardsCollection: React.FC<any> = ({
 							alt={"Loading card"}
 						  />
 						))
-					) : data && data.length > 0 ? (
-						data.map((nft, index) => {
+					) : [nftData] && [nftData].length > 0 ? (
+						[nftData].map((nft, index) => {
 							return (
 								<CardSingle
 									key={index}
