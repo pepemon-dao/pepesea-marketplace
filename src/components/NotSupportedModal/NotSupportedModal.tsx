@@ -21,7 +21,7 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
   
 	const handleSwitch = async () => {
 	  try {
-		await switchChain(906090);
+		await switchChain(1);
 	  } catch (error: any) {
 		setUnhandledError({
 		  errCode: error.code,
@@ -40,7 +40,7 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
 		  />
 		) : (
 		  <Modal>
-			<ModalTitle text="Switch to pepechain-testnet" />
+			<ModalTitle text="Switch to Ethereum" />
 			<ModalContent>
 			  <Text
 				align="center"
@@ -50,14 +50,14 @@ const NotSupportedModal: React.FC<{ page: string }> = ({ page }) => {
 			  >
 				{`Your chosen network is currently not supported on the ${page} page.`}
 				<br />
-				Please change your wallet provider's network to pepechain-testnet.
+				Please change your wallet provider's network to Ethereum.
 			  </Text>
 			</ModalContent>
 			<Spacer size="md" />
 			<ModalActions
 			  modalActions={[
 				{
-				  text: 'Switch to pepeCHAIN',
+				  text: 'Switch to Etherum',
 				  buttonProps: { styling: 'purple', onClick: handleSwitch },
 				},
 			  ]}

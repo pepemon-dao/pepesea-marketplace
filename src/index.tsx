@@ -6,6 +6,7 @@ import {
 	metamaskWallet,
 	coinbaseWallet,
 } from '@thirdweb-dev/react';
+import { Ethereum } from "@thirdweb-dev/chains";
 import './index.css';
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
@@ -33,10 +34,7 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-	<ThirdwebProvider
-		activeChain={activeChain}
-		supportedChains={[activeChain]}
-		supportedWallets={[metamaskWallet(), coinbaseWallet()]}>
+	<ThirdwebProvider activeChain="ethereum" clientId="dbe887550602ce19ddcc82041fdc6f01" >
 		<App />
 	</ThirdwebProvider>
 );
